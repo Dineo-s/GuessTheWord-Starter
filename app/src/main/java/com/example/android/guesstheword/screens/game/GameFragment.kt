@@ -53,37 +53,43 @@ class GameFragment : Fragment() {
 
         Log.i("GameFragment", "Called ViewModelProvider.get")
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
-        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+        //making viewmodel speak directly with xml and not UI controller
+        binding.gameViewModel = viewModel
+        //..for livedata
+        binding.lifecycleOwner = viewLifecycleOwner
+
+       /* viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
-        })
-        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
+        })*/
+
+      /*  viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
             binding.wordText.text = newWord
-        })
+        })*/
 
         viewModel.eventGameFinished.observe(viewLifecycleOwner, Observer { hasFinished ->
             if (hasFinished) gameFinished()
         })
 
-        binding.correctButton.setOnClickListener { onCorrect() }
-        binding.skipButton.setOnClickListener { onSkip() }
-        binding.endGameButton.setOnClickListener { onEndGame() }
+        //lines below not needed anymore due to listener bindings in xml
+        //binding.correctButton.setOnClickListener { onCorrect() }
+        // binding.skipButton.setOnClickListener { onSkip() }
+        //binding.endGameButton.setOnClickListener { onEndGame() }
 
         return binding.root
     }
 
+    //also not needed
+    /*
     private fun onSkip() {
-        viewModel.onSkip()
-
-    }
-
-    private fun onCorrect() {
-        viewModel.onCorrect()
-    }
-
-
-    private fun onEndGame() {
-        gameFinished()
-    }
+         viewModel.onSkip()
+     }
+     private fun onCorrect() {
+         viewModel.onCorrect()
+     }
+     private fun onEndGame() {
+         gameFinished()
+     }
+     */
 
     private fun gameFinished() {
         Toast.makeText(activity, "Game has just finished", Toast.LENGTH_SHORT).show()
